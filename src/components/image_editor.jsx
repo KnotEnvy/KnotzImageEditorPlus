@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { processImage } from '../api/api';
+import RotationControl from './RotationControl';
 
 function ImageEditor() {
   const location = useLocation();
   const imageFile = location.state.imageFile;
   const [resolution, setResolution] = useState(100);
   const [processedImage, setProcessedImage] = useState(null);
+  // Add rotation state
+  const [rotation, setRotation] = useState(0); // Angle in degrees
+  
 
   const handleAdjustResolution = async () => {
     const options = { resolution };
+    const result = await processImage(imageFile, options);
+    setProcessedImage(result.image);
+  };
+  const handleApplyEdits = async () => {
+    const options = { resolution, rotation }; // Include rotation
     const result = await processImage(imageFile, options);
     setProcessedImage(result.image);
   };
@@ -50,6 +59,13 @@ function ImageEditor() {
         >
           Adjust Resolution
         </button>
+        <div>
+            <label>Rotation (Degrees): </label>
+            <RotationControl value={rotation} onChange={setRotation} />
+            <button onClick={handleApplyEdits} className="mt-4 md:mt-0 bg-blue-600 text-white px-4 py-2 rounded"
+            >Apply Edits</button>
+        </div>
+        
       </div>
     </div>
   );
