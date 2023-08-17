@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { processImage } from '../api/api';
 import RotationControl from './RotationControl';
+import ResolutionControl from './ResolutionControl';
 
 function ImageEditor() {
   const location = useLocation();
@@ -43,30 +44,30 @@ function ImageEditor() {
           </div>
         )}
       </div>
-      <div className="mt-4 flex flex-col items-center md:flex-row md:justify-between">
+      <div className="mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded">
         <div className="flex items-center">
-          <label className="mr-2">Resolution Adjustment (%): </label>
-          <input
-            type="number"
-            value={resolution}
-            onChange={(e) => setResolution(e.target.value)}
-            className="border rounded p-1 w-20"
-          />
+            <ResolutionControl value={resolution} onChange={setResolution} />
         </div>
         <button
-          onClick={handleAdjustResolution}
-          className="mt-4 md:mt-0 bg-blue-600 text-white px-4 py-2 rounded"
+            onClick={handleAdjustResolution}
+            className="mt-4 md:mt-0 bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-400"
         >
-          Adjust Resolution
+            Adjust Resolution
         </button>
-        <div>
-            <label>Rotation (Degrees): </label>
-            <RotationControl value={rotation} onChange={setRotation} />
-            <button onClick={handleApplyEdits} className="mt-4 md:mt-0 bg-blue-600 text-white px-4 py-2 rounded"
-            >Apply Edits</button>
         </div>
-        
-      </div>
+        <div className="mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded">
+            <div className="flex items-center">
+                <label className="mr-2">Rotation (Degrees): </label>
+                <RotationControl value={rotation} onChange={setRotation} />
+            </div>
+            <button
+                onClick={handleApplyEdits}
+                className="mt-4 md:mt-0 bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-400"
+            >
+                Apply Edits
+            </button>
+        </div>
+
     </div>
   );
 }

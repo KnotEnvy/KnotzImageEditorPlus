@@ -18,7 +18,7 @@ function ImageUpload() {
     <div className="bg-white shadow-lg rounded-lg p-6 mx-auto w-full max-w-md">
       <h2 className="text-2xl font-semibold mb-4">Upload Image</h2>
       <div className="flex flex-col items-center">
-        <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded">
+        <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-400">
           <input
             type="file"
             accept="image/*"
@@ -38,7 +38,7 @@ function ImageUpload() {
         )}
         <button
           onClick={handleImageUpload}
-          className="mt-4 bg-green-500 text-white px-4 py-2 rounded disabled:bg-gray-300"
+          className="mt-4 bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded disabled:bg-gray-300"
           disabled={!imageFile}
         >
           Continue to Editor
