@@ -1,8 +1,9 @@
-from flask import Flask, request, send_from_directory, send_file
+from flask import Flask, request, send_from_directory, send_file, jsonify
 from flask_cors import CORS
 from PIL import Image
 import json
 import os
+import numpy as np
 
 app = Flask(__name__, static_folder='uploads')
 CORS(app, resources={r"/process": {"origins": "http://localhost:3000"}})
@@ -32,6 +33,44 @@ def process_image():
     rotated_image.save(output_path)
 
     return {'image': f'http://localhost:8000/uploads/{filename}'}
+
+def remove_watermark(image, x, y, width, height):
+    # Read the image
+    img = np.array(image)
+    
+    # Define the region where the watermark is located
+    region = img[y:y+height, x:x+width]
+
+    # Apply the watermark removal logic (this is a simple example; a more advanced algorithm could be used)
+    region_mean = region.mean(axis=(0, 1))
+    region[:,:,:] = region_mean
+
+    # Replace the region in the original image
+    img[y:y+height, x:x+width] = region
+    
+    # Convert back to a PIL Image
+    processed_image = Image.fromarray(img)
+    
+    return processed_image
+
+@app.route('/remove_watermark', methods=['POST'])
+def remove_watermark_endpoint():
+    image_file = request.files['image']
+    coordinates = request.json['coordinates']
+    x, y, width, height = coordinates['x'], coordinates['y'], coordinates['width'], coordinates['height']
+
+    # Load the image
+    image = Image.open(image_file)
+
+    # Remove the watermark
+    processed_image = remove_watermark(image, x, y, width, height)
+
+    # Save the processed image
+    filename = 'watermark_removed.jpg'
+    output_path = os.path.join(UPLOAD_FOLDER, filename)
+    processed_image.save(output_path)
+
+    return {'image': f'http://localhost:8000/{output_path}'}
 
 
 @app.route('/uploads/<filename>', methods=['GET'])

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { processImage } from '../api/api';
 import RotationControl from './RotationControl';
 import ResolutionControl from './ResolutionControl';
 import { BarLoader } from 'react-spinners';
+import { processImage, removeWatermark } from '../api/api'; // Update API file to include removeWatermark function
+import WatermarkRemovalControl from './WatermarkRemovalControl';
 
 function ImageEditor() {
   const location = useLocation();
@@ -13,6 +14,13 @@ function ImageEditor() {
   // Add rotation state
   const [rotation, setRotation] = useState(0); // Angle in degrees
   const [loading, setLoading] = useState(false);
+  const [showWatermarkModal, setShowWatermarkModal] = useState(false);
+
+  const handleRemoveWatermark = async (coordinates) => {
+    setShowWatermarkModal(false);
+    const result = await removeWatermark(imageFile, coordinates);
+    setProcessedImage(result.image);
+  };
   
 
   const handleAdjustResolution = async () => {
@@ -73,6 +81,20 @@ function ImageEditor() {
                 Apply Edits
             </button>
         </div>
+        <button
+        onClick={() => setShowWatermarkModal(true)}
+        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-400"
+      >
+        Remove Watermark
+      </button>
+      {showWatermarkModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded">
+          <WatermarkRemovalControl imageFile={imageFile} onRemoveWatermark={handleRemoveWatermark} />
+            <button onClick={() => setShowWatermarkModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
