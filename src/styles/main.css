@@ -2,3 +2,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+button {
+    transition: background-color 0.5s ease;
+  }

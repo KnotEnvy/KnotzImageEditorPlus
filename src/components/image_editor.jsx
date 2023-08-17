@@ -44,7 +44,7 @@ function ImageEditor() {
           </div>
         )}
       </div>
-      <div className="mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded">
+      <div className="mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded shadow-lg">
         <div className="flex items-center">
             <ResolutionControl value={resolution} onChange={setResolution} />
         </div>
@@ -55,9 +55,8 @@ function ImageEditor() {
             Adjust Resolution
         </button>
         </div>
-        <div className="mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded">
+        <div className="mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded shadow-lg">
             <div className="flex items-center">
-                <label className="mr-2">Rotation (Degrees): </label>
                 <RotationControl value={rotation} onChange={setRotation} />
             </div>
             <button
