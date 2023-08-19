@@ -6,7 +6,10 @@ import os
 import numpy as np
 
 app = Flask(__name__, static_folder='uploads')
-CORS(app, resources={r"/process": {"origins": "http://localhost:3000"}})
+CORS(app, resources={
+    r"/process": {"origins": "http://localhost:3000"},
+    r"/remove_watermark": {"origins": "http://localhost:3000"}
+})
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -56,8 +59,14 @@ def remove_watermark(image, x, y, width, height):
 @app.route('/remove_watermark', methods=['POST'])
 def remove_watermark_endpoint():
     image_file = request.files['image']
-    coordinates = request.json['coordinates']
-    x, y, width, height = coordinates['x'], coordinates['y'], coordinates['width'], coordinates['height']
+    coordinates_json = request.form['coordinates']
+    coordinates = json.loads(coordinates_json)
+    
+    # Convert coordinates to integers
+    x = int(coordinates['x'])
+    y = int(coordinates['y'])
+    width = int(coordinates['width'])
+    height = int(coordinates['height'])
 
     # Load the image
     image = Image.open(image_file)
@@ -65,12 +74,15 @@ def remove_watermark_endpoint():
     # Remove the watermark
     processed_image = remove_watermark(image, x, y, width, height)
 
-    # Save the processed image
-    filename = 'watermark_removed.jpg'
+    # Generate a unique filename consistent with the process_image function
+    filename = f'watermark_removed_{x}_{y}_{width}_{height}.jpg'
     output_path = os.path.join(UPLOAD_FOLDER, filename)
     processed_image.save(output_path)
 
-    return {'image': f'http://localhost:8000/{output_path}'}
+    return {'image': f'http://localhost:8000/uploads/{filename}'}
+
+
+
 
 
 @app.route('/uploads/<filename>', methods=['GET'])

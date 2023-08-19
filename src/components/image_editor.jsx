@@ -81,20 +81,25 @@ function ImageEditor() {
                 Apply Edits
             </button>
         </div>
+        <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded shadow-lg">
+            <div className="flex items-center">
+              Watermark Remover
+            </div>
         <button
         onClick={() => setShowWatermarkModal(true)}
-        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-400"
+        className="mt-4 md:mt-0 bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-400"
       >
         Remove Watermark
       </button>
       {showWatermarkModal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded">
+          <div className="bg-white rounded">
           <WatermarkRemovalControl imageFile={imageFile} onRemoveWatermark={handleRemoveWatermark} />
             <button onClick={() => setShowWatermarkModal(false)}>Cancel</button>
           </div>
         </div>
       )}
+      </div>
 
     </div>
   );
