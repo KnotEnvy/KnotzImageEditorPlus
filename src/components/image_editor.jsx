@@ -59,7 +59,7 @@ function ImageEditor() {
           </div>
         )}
       </div>
-      <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded shadow-lg">
+      <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between  hover:bg-gray-200 p-2 rounded shadow-lg">
         <div className="flex items-center">
             <ResolutionControl value={resolution} onChange={setResolution} />
         </div>
@@ -70,7 +70,7 @@ function ImageEditor() {
             Adjust Resolution
         </button>
         </div>
-        <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded shadow-lg">
+        <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between  hover:bg-gray-200 p-2 rounded shadow-lg">
             <div className="flex items-center">
                 <RotationControl value={rotation} onChange={setRotation} />
             </div>
@@ -81,7 +81,7 @@ function ImageEditor() {
                 Apply Edits
             </button>
         </div>
-        <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between bg-gray-100 hover:bg-gray-200 p-2 rounded shadow-lg">
+        <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between hover:bg-gray-200 p-2 rounded shadow-lg">
             <div className="flex items-center">
               Watermark Remover
             </div>
