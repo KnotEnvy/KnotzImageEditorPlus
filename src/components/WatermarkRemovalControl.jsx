@@ -32,7 +32,7 @@ function WatermarkRemovalControl({ imageFile, onRemoveWatermark }) {
         alt="Original"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
-        className="cursor-crosshair"
+        className="cursor-square"
       />
       <p>Click and drag on the image to select the watermark area.</p>
     </div>

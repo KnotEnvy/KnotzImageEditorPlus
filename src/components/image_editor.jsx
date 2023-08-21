@@ -3,8 +3,10 @@ import { useLocation } from 'react-router-dom';
 import RotationControl from './RotationControl';
 import ResolutionControl from './ResolutionControl';
 import { BarLoader } from 'react-spinners';
-import { processImage, removeWatermark } from '../api/api'; // Update API file to include removeWatermark function
+import { processImage, removeWatermark, API_URL } from '../api/api'; // Update API file to include removeWatermark function
 import WatermarkRemovalControl from './WatermarkRemovalControl';
+// Import the API_URL constant
+
 
 function ImageEditor() {
   const location = useLocation();
@@ -13,13 +15,19 @@ function ImageEditor() {
   const [processedImage, setProcessedImage] = useState(null);
   // Add rotation state
   const [rotation, setRotation] = useState(0); // Angle in degrees
+  // Add denoise state
+  const [denoise, setDenoise] = useState(false); // Boolean value
+  // Add other options state (you can add more options as you like)
+  const [otherOptions, setOtherOptions] = useState({}); // Object value
   const [loading, setLoading] = useState(false);
   const [showWatermarkModal, setShowWatermarkModal] = useState(false);
 
   const handleRemoveWatermark = async (coordinates) => {
     setShowWatermarkModal(false);
+    setLoading(true); // Show loading spinner
     const result = await removeWatermark(imageFile, coordinates);
-    setProcessedImage(result.image);
+    setProcessedImage(result.image); // Update processed image state
+    setLoading(false); // Hide loading spinner
   };
   
 
@@ -27,16 +35,20 @@ function ImageEditor() {
     setLoading(true);
     const options = { resolution };
     const result = await processImage(imageFile, options);
-    setProcessedImage(result.image);
+    setProcessedImage(result.image); // Update processed image state
     setLoading(false);
   };
+  
+  // Add a new function to handle apply edits with all options
   const handleApplyEdits = async () => {
     setLoading(true);
-    const options = { resolution, rotation }; // Include rotation
+    // Include all options in one object
+    const options = { resolution, rotation, denoise, ...otherOptions };
     const result = await processImage(imageFile, options);
-    setProcessedImage(result.image);
+    setProcessedImage(result.image); // Update processed image state
     setLoading(false);
   };
+
     // Extract filename from processed image URL
     const filename = processedImage ? processedImage.split('/').pop() : '';
 
@@ -53,7 +65,8 @@ function ImageEditor() {
           <div className="card-slide-in flex flex-col items-center">
             <h3 className="text-xl font-medium mb-2">Processed Image</h3>
             <img src={processedImage} alt="Processed" className="h-64 object-cover rounded" />
-            <a href={`http://localhost:8000/download/${filename}`} download className="mt-2 text-blue-500">
+            {/* Use a relative URL for downloading */}
+            <a href={`${API_URL}/download/${filename}`} download className="mt-2 text-blue-500">
               Download
             </a>
           </div>
@@ -63,6 +76,13 @@ function ImageEditor() {
         <div className="flex items-center">
             <ResolutionControl value={resolution} onChange={setResolution} />
         </div>
+        <label className="ml-2">Denoise: </label>
+            <input
+              type="checkbox"
+              checked={denoise}
+              onChange={(e) => setDenoise(e.target.checked)}
+              className="ml-1"
+            />
         <button
             onClick={handleAdjustResolution}
             className="mt-4 md:mt-0 bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-400"
@@ -81,7 +101,7 @@ function ImageEditor() {
                 Apply Edits
             </button>
         </div>
-        <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between hover:bg-gray-200 p-2 rounded shadow-lg">
+        <div className="card-slide-in mt-4 flex flex-col items-center md:flex-row md:justify-between  hover:bg-gray-200 p-2 rounded shadow-lg">
             <div className="flex items-center">
               Watermark Remover
             </div>
